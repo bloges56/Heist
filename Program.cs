@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Heist
 {
@@ -8,53 +9,70 @@ namespace Heist
         {
             Console.WriteLine("Plan Your Heist!");
 
-            //Declare a member and prompt the user for its name
-            Member userMember = new Member();
-            Console.Write("Enter a team member's name: ");
-            userMember.name = Console.ReadLine();
+            //create a list of members to store what the user enters
+            List<Member> members = new List<Member>();
 
-            //prompt the user for the member's skill level
             while (true)
             {
-                Console.Write("Enter a team member's skill level: ");
-                try
+                //Declare a member and prompt the user for its name
+                Member userMember = new Member();
+                Console.Write("Enter a team member's name (leave blank to stop adding members): ");
+                userMember.name = Console.ReadLine();
+
+                //if the user name is empty, break out of loop
+                if(userMember.name == "")
                 {
-                    userMember.skillLevel = Int32.Parse(Console.ReadLine());
-                    if (userMember.skillLevel <= 0)
-                    {
-                        throw new Exception();
-                    }
                     break;
                 }
-                catch
+
+                //prompt the user for the member's skill level
+                while (true)
                 {
-                    Console.WriteLine("Please enter an integer greater than 0");
+                    Console.Write("Enter a team member's skill level: ");
+                    try
+                    {
+                        userMember.skillLevel = Int32.Parse(Console.ReadLine());
+                        if (userMember.skillLevel <= 0)
+                        {
+                            throw new Exception();
+                        }
+                        break;
+                    }
+                    catch
+                    {
+                        Console.WriteLine("Please enter an integer greater than 0");
+                    }
+                }
+
+                //prompt the user for the member's courage factor
+                while (true)
+                {
+                    Console.Write("Enter a team member's courage factor: ");
+                    try
+                    {
+                        userMember.courageFactor = Double.Parse(Console.ReadLine());
+                        if (userMember.courageFactor <= 0)
+                        {
+                            throw new Exception();
+                        }
+                        //after all the member's information has been gathered, add to the list
+                        members.Add(userMember);
+                        break;
+                    }
+                    catch
+                    {
+                        Console.WriteLine("Please enter a decimal value greater than 0");
+                    }
                 }
             }
 
-            //prompt the user for the member's courage factor
-            while (true)
+            //display all the members
+            Console.WriteLine("\nYour Members\n");
+
+            foreach(Member member in members)
             {
-                Console.Write("Enter a team member's courage factor: ");
-                try
-                {
-                    userMember.courageFactor = Double.Parse(Console.ReadLine());
-                    if (userMember.courageFactor <= 0)
-                    {
-                        throw new Exception();
-                    }
-                    break;
-                }
-                catch
-                {
-                    Console.WriteLine("Please enter a decimal value greater than 0");
-                }
+                member.displayMember();
             }
-            
-            //display the member information
-            Console.WriteLine($"Name: {userMember.name}");
-            Console.WriteLine($"Skill Level: {userMember.skillLevel}");
-            Console.WriteLine($"Courage Factor: {userMember.courageFactor}");
         }
     }
 }
