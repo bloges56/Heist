@@ -10,13 +10,13 @@ namespace Heist
 
             //prompt for the bank's difficulty
             int difficultyLevel;
-            while(true)
+            while (true)
             {
                 Console.Write("What is the difficulty of your bank: ");
                 try
                 {
                     difficultyLevel = Int32.Parse(Console.ReadLine());
-                    if(difficultyLevel <= 0)
+                    if (difficultyLevel <= 0)
                     {
                         throw new Exception();
                     }
@@ -27,7 +27,7 @@ namespace Heist
                     Console.WriteLine("Enter an integer greater than 0");
                 }
             }
-        
+
             //prompt the user to enter the team members
             Console.WriteLine("Plan Your Heist!");
 
@@ -88,65 +88,73 @@ namespace Heist
                 }
             }
 
-            //prompt for number of trial runs
-            int trialRuns;
-            while (true)
+            //check that members is not empty
+            if (members.Count != 0)
             {
-                Console.WriteLine("How many trial runs: ");
-                try
+
+                //prompt for number of trial runs
+                int trialRuns;
+                while (true)
                 {
-                    trialRuns = Int32.Parse(Console.ReadLine());
-                    if (trialRuns <= 0)
+                    Console.WriteLine("How many trial runs: ");
+                    try
                     {
-                        throw new Exception();
+                        trialRuns = Int32.Parse(Console.ReadLine());
+                        if (trialRuns <= 0)
+                        {
+                            throw new Exception();
+                        }
+                        break;
                     }
-                    break;
+                    catch
+                    {
+                        Console.WriteLine("Enter an integer greater than 0");
+                    }
                 }
-                catch
+
+                //sum the skill levels
+                int skillSum = 0;
+                foreach (Member member in members)
                 {
-                    Console.WriteLine("Enter an integer greater than 0");
+                    skillSum += member.skillLevel;
                 }
+
+                //initialize values for successful and failed runs
+                int successes = 0;
+                int failures = 0;
+
+                //run the heist based on the trial runs entered by the user
+                for (int i = 0; i < trialRuns; i++)
+                {
+                    //set the bank's difficulty level
+                    int luckValue = new Random().Next(-10, 11);
+                    int totalDifficulty = difficultyLevel + luckValue;
+
+                    Console.WriteLine($"\nTeam's Skill: {skillSum}");
+                    Console.WriteLine($"Bank's Difficulty: {totalDifficulty}");
+
+                    //compare the sum of the skills and the bank difficulty and display an appropriate message
+                    //increment either failures or successes
+                    if (skillSum >= totalDifficulty)
+                    {
+                        Console.WriteLine("Successful Heist!");
+                        successes += 1;
+                    }
+                    else
+                    {
+                        Console.WriteLine("You went to jail");
+                        failures += 1;
+                    }
+                }
+
+                //Display total failures and total success
+                Console.WriteLine($"\nSuccesses: {successes}");
+                Console.WriteLine($"Failures: {failures}");
             }
-
-
-            //sum the skill levels
-            int skillSum = 0;
-            foreach (Member member in members)
+            else
             {
-                skillSum += member.skillLevel;
+                Console.WriteLine("Can't perform a heist without a team!");
             }
-
-            //initialize values for successful and failed runs
-            int successes = 0;
-            int failures = 0;
-
-            //run the heist based on the trial runs entered by the user
-            for (int i = 0; i < trialRuns; i++)
-            {
-                //set the bank's difficulty level
-                int luckValue = new Random().Next(-10, 11);
-                int totalDifficulty = difficultyLevel + luckValue;
-
-                Console.WriteLine($"\nTeam's Skill: {skillSum}");
-                Console.WriteLine($"Bank's Difficulty: {totalDifficulty}");
-
-                //compare the sum of the skills and the bank difficulty and display an appropriate message
-                //increment either failures or successes
-                if (skillSum >= totalDifficulty)
-                {
-                    Console.WriteLine("Successful Heist!");
-                    successes += 1;
-                }
-                else
-                {
-                    Console.WriteLine("You went to jail");
-                    failures += 1;
-                }
-            }
-            
-            //Display total failures and total success
-            Console.WriteLine($"\nSuccesses: {successes}");
-            Console.WriteLine($"Failures: {failures}");
         }
     }
 }
