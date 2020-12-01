@@ -8,6 +8,26 @@ namespace Heist
         static void Main(string[] args)
         {
 
+            //prompt for the bank's difficulty
+            int difficultyLevel;
+            while(true)
+            {
+                Console.Write("What is the difficulty of your bank: ");
+                try
+                {
+                    difficultyLevel = Int32.Parse(Console.ReadLine());
+                    if(difficultyLevel <= 0)
+                    {
+                        throw new Exception();
+                    }
+                    break;
+                }
+                catch
+                {
+                    Console.WriteLine("Enter an integer greater than 0");
+                }
+            }
+        
             //prompt the user to enter the team members
             Console.WriteLine("Plan Your Heist!");
 
@@ -96,11 +116,14 @@ namespace Heist
                 skillSum += member.skillLevel;
             }
 
+            //initialize values for successful and failed runs
+            int successes = 0;
+            int failures = 0;
+
             //run the heist based on the trial runs entered by the user
             for (int i = 0; i < trialRuns; i++)
             {
                 //set the bank's difficulty level
-                int difficultyLevel = 100;
                 int luckValue = new Random().Next(-10, 11);
                 int totalDifficulty = difficultyLevel + luckValue;
 
@@ -108,15 +131,22 @@ namespace Heist
                 Console.WriteLine($"Bank's Difficulty: {totalDifficulty}");
 
                 //compare the sum of the skills and the bank difficulty and display an appropriate message
+                //increment either failures or successes
                 if (skillSum >= totalDifficulty)
                 {
                     Console.WriteLine("Successful Heist!");
+                    successes += 1;
                 }
                 else
                 {
                     Console.WriteLine("You went to jail");
+                    failures += 1;
                 }
             }
+            
+            //Display total failures and total success
+            Console.WriteLine($"\nSuccesses: {successes}");
+            Console.WriteLine($"Failures: {failures}");
         }
     }
 }
