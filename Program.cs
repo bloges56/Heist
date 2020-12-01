@@ -7,6 +7,9 @@ namespace Heist
     {
         static void Main(string[] args)
         {
+            //set the bank's difficulty level
+            int difficultyLevel = 100;
+
             Console.WriteLine("Plan Your Heist!");
 
             //create a list of members to store what the user enters
@@ -66,12 +69,21 @@ namespace Heist
                 }
             }
 
-            //display all the members
-            Console.WriteLine("\nYour Members\n");
-
+            //sum the skill levels
+            int skillSum = 0;
             foreach(Member member in members)
             {
-                member.displayMember();
+                skillSum += member.skillLevel;
+            }
+
+            //compare the sum of the skills and the bank difficulty and display an appropriate message
+            if(skillSum >= difficultyLevel)
+            {
+                Console.WriteLine("Successful Heist!");
+            }
+            else
+            {
+                Console.WriteLine("You went to jail");
             }
         }
     }
