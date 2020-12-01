@@ -7,11 +7,6 @@ namespace Heist
     {
         static void Main(string[] args)
         {
-            //set the bank's difficulty level
-            int difficultyLevel = 100;
-            int luckValue = new Random().Next(-10, 11);
-            int totalDifficulty = difficultyLevel + luckValue;
-
 
             //prompt the user to enter the team members
             Console.WriteLine("Plan Your Heist!");
@@ -27,7 +22,7 @@ namespace Heist
                 userMember.name = Console.ReadLine();
 
                 //if the user name is empty, break out of loop
-                if(userMember.name == "")
+                if (userMember.name == "")
                 {
                     break;
                 }
@@ -73,24 +68,54 @@ namespace Heist
                 }
             }
 
+            //prompt for number of trial runs
+            int trialRuns;
+            while (true)
+            {
+                Console.WriteLine("How many trial runs: ");
+                try
+                {
+                    trialRuns = Int32.Parse(Console.ReadLine());
+                    if (trialRuns <= 0)
+                    {
+                        throw new Exception();
+                    }
+                    break;
+                }
+                catch
+                {
+                    Console.WriteLine("Enter an integer greater than 0");
+                }
+            }
+
+
             //sum the skill levels
             int skillSum = 0;
-            foreach(Member member in members)
+            foreach (Member member in members)
             {
                 skillSum += member.skillLevel;
             }
 
-            Console.WriteLine($"\nTeam's Skill: {skillSum}");
-            Console.WriteLine($"Bank's Difficulty: {totalDifficulty}");
+            //run the heist based on the trial runs entered by the user
+            for (int i = 0; i < trialRuns; i++)
+            {
+                //set the bank's difficulty level
+                int difficultyLevel = 100;
+                int luckValue = new Random().Next(-10, 11);
+                int totalDifficulty = difficultyLevel + luckValue;
 
-            //compare the sum of the skills and the bank difficulty and display an appropriate message
-            if(skillSum >= totalDifficulty)
-            {
-                Console.WriteLine("Successful Heist!");
-            }
-            else
-            {
-                Console.WriteLine("You went to jail");
+                Console.WriteLine($"\nTeam's Skill: {skillSum}");
+                Console.WriteLine($"Bank's Difficulty: {totalDifficulty}");
+
+                //compare the sum of the skills and the bank difficulty and display an appropriate message
+                if (skillSum >= totalDifficulty)
+                {
+                    Console.WriteLine("Successful Heist!");
+                }
+                else
+                {
+                    Console.WriteLine("You went to jail");
+                }
             }
         }
     }
